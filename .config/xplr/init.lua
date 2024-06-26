@@ -1,6 +1,6 @@
 ---@diagnostic disable
 local xplr = xplr -- The globally exposed configuration to be overridden.
-version = "0.21.5"
+version = "0.21.9"
 ---@diagnostic enable
 
 local home = os.getenv("HOME")
@@ -14,12 +14,14 @@ package.path = package.path
 	.. "/.config/xplr/?.lua;"
 	.. home
 	.. "/.config/xplr/config/modes/?.lua;"
-	.. home
-	.. "/.config/xplr/plugins/?.lua;"
+	-- .. home
+	-- .. "/.config/xplr/plugins/?.lua;"
 	.. xpm_path
 	.. "/?.lua;"
 	.. xpm_path
 	.. "/?/init.lua"
+
+os.execute(string.format("[ -e '%s' ] || git clone '%s' '%s'", xpm_path, xpm_url, xpm_path))
 
 require("general")
 require("modes")
@@ -28,7 +30,6 @@ require("node_types")
 require("functions")
 -- require("config.hooks")
 
-os.execute(string.format("[ -e '%s' ] || git clone --depth 1 '%s' '%s'", xpm_path, xpm_url, xpm_path))
 
 require("xpm").setup({
 	plugins = {
@@ -52,7 +53,7 @@ require("xpm").setup({
 		-- { name = "sayanarijit/nvim-ctrl.xplr" },
 		-- { name = "dtomvan/ouch.xplr" },
 		-- { name = "dtomvan/paste-rs.xplr" },
-		-- { name = "sayanarijit/preview-tabbed.xplr" },
+		{ name = "sayanarijit/preview-tabbed.xplr" },
 		-- { name = "sayanarijit/qrcp.xplr" },
 		-- { name = "sayanarijit/scp.xplr" },
 		-- { name = "sayanarijit/trash-cli.xplr" },
@@ -68,7 +69,7 @@ require("xpm").setup({
 		{ name = "dtomvan/extra-icons.xplr" },
 		{ name = "sayanarijit/map.xplr" },
 		-- { name = "sayanarijit/tree-view.xplr" },
-		{},
+		-- {},
 	},
 	auto_install = true,
 	auto_cleanup = false,
@@ -112,76 +113,71 @@ xplr.config.modes.builtin.go_to.key_bindings.on_key.x = {
 
 xplr.config.modes.builtin.default.key_bindings.on_key.enter = xplr.config.modes.builtin.go_to.key_bindings.on_key.x
 
--- require("tri-pane").setup({
--- 	layout_key = "T", -- In switch_layout mode
--- 	as_default_layout = true,
--- 	left_pane_width = { Percentage = 20 },
--- 	middle_pane_width = { Percentage = 50 },
--- 	right_pane_width = { Percentage = 30 },
--- 	left_pane_renderer = custom_function_to_render_left_pane,
--- 	right_pane_renderer = custom_function_to_render_right_pane,
--- })
+require("tri-pane").setup{
+	-- layout_key = "T", -- In switch_layout mode
+	as_default_layout = false,
+	left_pane_width = { Percentage = 20 },
+	middle_pane_width = { Percentage = 50 },
+	right_pane_width = { Percentage = 30 },
+	-- left_pane_renderer = custom_function_to_render_left_pane,
+	-- right_pane_renderer = custom_function_to_render_right_pane,
+}
+
+require("preview-tabbed").setup{
+  mode = "action",
+  key = "P",
+  fifo_path = "/tmp/xplr.fifo",
+  previewer = os.getenv("HOME") .. "/.config/nnn/plugins/preview-tabbed",
+}
 
 require("zentable").setup()
-
 require("fzf").setup()
 require("icons").setup()
 require("extra-icons").setup()
 
 require("tree-view").setup({
 	mode = "switch_layout",
-	key = "T",
-
+	key = "t",
 	-- If you feel slowness, you might want to toggle back to the default view.
 	toggle_layout_mode = "default",
-	toggle_layout_key = "esc",
-
+	toggle_layout_key = "t",
 	-- Press backspace to close all and back and close
 	close_all_and_back_mode = "default",
 	close_all_and_back_key = "backspace",
-
 	-- Toggle expansion without entering
 	toggle_expansion_mode = "default",
 	toggle_expansion_key = "o",
-
 	-- Toggle expansion of all the nodes under pwd
 	toggle_expansion_all_mode = "default",
 	toggle_expansion_all_key = "O",
-
 	-- Focus on the next visible line, not compatible with up/down action
 	focus_next_mode = "default",
 	focus_next_key = "]",
-
 	-- Focus on the previous visible line, not compatible with up/down action
 	focus_prev_mode = "default",
 	focus_prev_key = "[",
-
 	-- Go to the next deep level directory that's open
 	goto_next_open_mode = "default",
 	goto_next_open_key = ")",
-
 	-- Go to the previous deep level directory that's open
 	goto_prev_open_mode = "default",
 	goto_prev_open_key = "(",
-
 	-- Whether to display the tree in full screen
 	fullscreen = false,
-
 	-- Indent for the branches of the tree
 	indent = "  ",
-
 	-- Start xplr with tree view layout
 	as_initial_layout = false,
-
 	-- Disables toggling layout.
 	as_default_layout = false,
-
 	-- Automatically fallback to this layout for better performance if the
 	-- branch contains # of nodes more than the threshold value
 	fallback_layout = "Table",
 	fallback_threshold = 500, -- default: nil (disabled)
 })
 
+-- Previewer
+--[[
 local function stat(node)
 	return xplr.util.to_yaml(xplr.util.node(node.absolute_path))
 end
@@ -236,8 +232,8 @@ local split_preview = {
 	Horizontal = {
 		config = {
 			constraints = {
-				{ Percentage = 60 },
 				{ Percentage = 40 },
+				{ Percentage = 60 },
 			},
 		},
 		splits = {
@@ -249,3 +245,4 @@ local split_preview = {
 
 xplr.config.layouts.builtin.default =
 	xplr.util.layout_replace(xplr.config.layouts.builtin.default, "Table", split_preview)
+--]]

@@ -1,4 +1,6 @@
 *
+!/bin/tools/define-app
+!/bin/tools/run-desktop
 !/.config/xplr/config/functions.lua
 !/.config/xplr/config/general.lua
 !/.config/xplr/config/hooks.lua
