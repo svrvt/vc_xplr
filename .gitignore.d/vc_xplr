@@ -4,6 +4,9 @@
 !/bin/tools/define-app
 !/bin/tools/run-desktop
 !/.config
+!/.config/mr
+!/.config/mr/available.d
+!/.config/mr/available.d/vc_xplr
 !/.config/xplr
 !/.config/xplr/config
 !/.config/xplr/config/functions.lua
