@@ -6,7 +6,8 @@
 !/.config
 !/.config/mr
 !/.config/mr/available.d
-!/.config/mr/available.d/vc_xplr
+!/.config/mr/available.d/vc
+!/.config/mr/available.d/vc/vc_xplr
 !/.config/xplr
 !/.config/xplr/config
 !/.config/xplr/config/functions.lua
