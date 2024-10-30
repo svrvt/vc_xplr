@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=xplr
-Comment=Launches the xplr file manager
+Comment=The xplr file manager
 Terminal=true
 Exec=xplr %U
 Icon=xplr
