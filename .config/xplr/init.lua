@@ -30,7 +30,6 @@ require("node_types")
 require("functions")
 -- require("config.hooks")
 
-
 require("xpm").setup({
 	plugins = {
 		-- Let xpm manage itself
@@ -75,7 +74,14 @@ require("xpm").setup({
 	auto_cleanup = false,
 })
 
-xplr.config.modes.builtin.default.key_bindings.on_key.x = {
+-- xplr.config.modes.builtin.action.key_bindings.on_key.p = nil
+
+local key = xplr.config.modes.builtin.default.key_bindings.on_key
+local key_action = xplr.config.modes.builtin.action.key_bindings.on_key
+
+key["e"] = key_action["e"]
+
+key["x"] = {
 	help = "xpm",
 	messages = {
 		"PopMode",
@@ -84,14 +90,14 @@ xplr.config.modes.builtin.default.key_bindings.on_key.x = {
 }
 
 -- Custom Commands: 'open'
-xplr.config.modes.builtin.go_to.key_bindings.on_key.x = {
-	help = "open in gui",
+xplr.config.modes.builtin.go_to.key_bindings.on_key.o = {
+	help = "open ",
 	messages = {
 		{
 			BashExecSilently0 = [===[
               if [ -z "$OPENER" ]; then
                 if command -v define-app; then
-                  OPENER="define-app -a -r"
+                  OPENER="define-app -r"
                 elif command -v xdg-open; then
                   OPENER=xdg-open
                 elif command -v mimeopen; then
@@ -111,9 +117,16 @@ xplr.config.modes.builtin.go_to.key_bindings.on_key.x = {
 	},
 }
 
-xplr.config.modes.builtin.default.key_bindings.on_key.enter = xplr.config.modes.builtin.go_to.key_bindings.on_key.x
+key["enter"] = xplr.config.modes.builtin.go_to.key_bindings.on_key.o
 
-require("tri-pane").setup{
+key.v = {
+	help = "nuke",
+	messages = { "PopMode", { SwitchModeCustom = "nuke" } },
+}
+-- key["f3"] = xplr.config.modes.custom.nuke.key_bindings.on_key.v
+-- key["enter"] = xplr.config.modes.custom.nuke.key_bindings.on_key.o
+
+require("tri-pane").setup({
 	-- layout_key = "T", -- In switch_layout mode
 	as_default_layout = false,
 	left_pane_width = { Percentage = 20 },
@@ -121,14 +134,21 @@ require("tri-pane").setup{
 	right_pane_width = { Percentage = 30 },
 	-- left_pane_renderer = custom_function_to_render_left_pane,
 	-- right_pane_renderer = custom_function_to_render_right_pane,
-}
+})
 
-require("preview-tabbed").setup{
-  mode = "action",
-  key = "P",
-  fifo_path = "/tmp/xplr.fifo",
-  previewer = os.getenv("HOME") .. "/.config/nnn/plugins/preview-tabbed",
-}
+require("preview-tabbed").setup({
+	mode = "action",
+	key = "P",
+	fifo_path = "/tmp/xplr.fifo",
+	previewer = os.getenv("HOME") .. "/.config/nnn/plugins/preview-tabbed",
+})
+
+-- require("xclip").setup()
+-- copy_command = "xclip -sel clip",
+-- copy_paths_command = "xclip -sel clip",
+-- paste_command = "xclip -o -sel clip",
+-- keep_selection = false,
+-- }
 
 require("zentable").setup()
 require("fzf").setup()
