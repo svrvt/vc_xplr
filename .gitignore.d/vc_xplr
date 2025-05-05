@@ -6,7 +6,7 @@
 !/.config
 !/.config/mr
 !/.config/mr/available.d
-!/.config/mr/available.d/workflow.vc.xplr
+!/.config/mr/available.d/vc.xplr
 !/.config/xplr
 !/.config/xplr/config
 !/.config/xplr/config/functions.lua
