@@ -3,9 +3,6 @@
 !/bin/desktop
 !/bin/desktop/define-app
 !/bin/desktop/run-desktop
-!/bin/tools
-!/bin/tools/define-app
-!/bin/tools/run-desktop
 !/.config
 !/.config/mr
 !/.config/mr/available.d
